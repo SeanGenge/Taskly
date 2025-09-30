@@ -1,4 +1,13 @@
-<form [formGroup]="addTodoForm" (submit)="addTodoItem()">
-	<input id="description" type="text" formControlName="description" placeholder="Add your new Todo" />
-	<button type="submit" class="primary">Add Todo</button>
-</form>
+<div class="container">
+	<form [formGroup]="addTodoForm" (submit)="addTodoItem()">
+		<div class="row d-flex justify-content-center">
+			<div class="col-sm-12 col-md-10">
+				<input id="description" class="form-control add-item" type="text" formControlName="description"
+					placeholder="Type your task here..." />
+			</div>
+			<div class="col-sm-12 col-md-2 my-3 my-md-0">
+				<button type="submit" class="btn btn-primary">Add Task</button>
+			</div>
+		</div>
+	</form>
+</div>

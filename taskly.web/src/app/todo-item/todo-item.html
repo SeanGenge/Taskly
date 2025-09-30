@@ -1,4 +1,8 @@
-<div>
-	{{item.description}}
-	<button class="primary" (click)="deleteItem(item.id)">Delete</button>
+<div class="todo-item row my-3 rounded">
+	<div class="col-8">
+		<span>{{item.description}}</span>
+	</div>
+	<div class="col-4 d-flex align-items-center justify-content-end">
+		<button class="btn btn-danger btn-sm" (click)="deleteItem(item.id)">Delete</button>
+	</div>
 </div>

@@ -1,5 +1,7 @@
-@if (todoService.todoList().length > 0) {
-	@for (item of todoService.todoList(); track $index) {
-		<app-todo-item [item]="item"></app-todo-item>
+<div class="container my-3 my-md-5">
+	@if (todoService.todoList().length > 0) {
+		@for (item of todoService.todoList(); track $index) {
+			<app-todo-item [item]="item"></app-todo-item>
+		}
 	}
-}
+</div>
