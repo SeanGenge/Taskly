@@ -10,5 +10,5 @@ import { AddTodoItem } from './add-todo-item/add-todo-item';
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly title = signal('taskly.web');
+  protected readonly title = signal('taskly');
 }

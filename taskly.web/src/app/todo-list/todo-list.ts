@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { TodoService } from '../todo-service';
+import { TodoService } from '../services/todo-service';
 import { TodoItem } from '../todo-item/todo-item';
 
 @Component({

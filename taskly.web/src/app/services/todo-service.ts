@@ -1,7 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { Task } from './interfaces/task';
+import { Task } from '../interfaces/task';
 import { HttpClient } from '@angular/common/http';
-import { AddTodoItemDTO } from './interfaces/add-todo-item-dto';
+import { AddTodoItemDTO } from '../interfaces/add-todo-item-dto';
 
 @Injectable({
   providedIn: 'root'
