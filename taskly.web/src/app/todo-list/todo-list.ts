@@ -1,8 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TodoItem } from '../../models/todoItem.model';
-import { HttpClient } from '@angular/common/http';
 import { AsyncPipe } from '@angular/common';
+import { TodoService } from '../todoService';
+import { Task } from '../task';
 
 @Component({
   selector: 'app-todo-list',
@@ -11,10 +12,6 @@ import { AsyncPipe } from '@angular/common';
   styleUrl: './todo-list.css'
 })
 export class TodoList {
-  private http = inject(HttpClient);
-  task$ = this.getTasks();
-
-  private getTasks(): Observable<TodoItem[]> {
-    return this.http.get<TodoItem[]>('https://localhost:7171/api/taskly');
-  }
+  private todoService = inject(TodoService);
+  task$ = this.todoService.getAllTasks();
 }
