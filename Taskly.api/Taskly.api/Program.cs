@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Taskly.api.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,8 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddDbContext<TasklyDbContext>(options => options.UseInMemoryDatabase("TodoDb"));
 
 var app = builder.Build();
 
