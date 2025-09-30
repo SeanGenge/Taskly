@@ -7,6 +7,8 @@ The project uses Angular 20 and ASP.NET core web API with .NET 9.0 Framework.
 
 For completeness, I included the instructions down below.
 
+![Todo Application](todoImg.PNG)
+
 ## Installation
 To install the necessary dependencies, run the following command:
 
