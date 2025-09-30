@@ -1,13 +1,10 @@
 import { Component, inject } from '@angular/core';
-import { Observable } from 'rxjs';
-import { TodoItem } from '../../models/todoItem.model';
-import { AsyncPipe } from '@angular/common';
 import { TodoService } from '../todo-service';
-import { Task } from '../interfaces/task';
+import { TodoItem } from '../todo-item/todo-item';
 
 @Component({
   selector: 'app-todo-list',
-  imports: [],
+  imports: [TodoItem],
   templateUrl: './todo-list.html',
   styleUrl: './todo-list.css'
 })

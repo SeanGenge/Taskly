@@ -1,5 +1,5 @@
 @if (todoService.todoList().length > 0) {
 	@for (item of todoService.todoList(); track $index) {
-		<p>{{item.description}}</p>
+		<app-todo-item [item]="item"></app-todo-item>
 	}
 }

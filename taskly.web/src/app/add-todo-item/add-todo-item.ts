@@ -16,6 +16,7 @@ export class AddTodoItem {
   });
   
   addTodoItem() {
+    // Calls /api/taskly post with the new todo item
     this.todoService.addTask(this.addTodoForm.value.description ?? '');
     this.addTodoForm.reset();
   }
