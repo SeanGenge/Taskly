@@ -4,6 +4,8 @@ using Taskly.api.Models;
 
 namespace Taskly.api.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class TasklyController : Controller
     {
         private readonly TasklyDbContext dbContext;

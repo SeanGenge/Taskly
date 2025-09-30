@@ -1,9 +1,10 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { TodoList } from './todo-list/todo-list';
+import { Title } from './title/title';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [TodoList, Title],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
