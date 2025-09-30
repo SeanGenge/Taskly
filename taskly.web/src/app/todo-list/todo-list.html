@@ -1,7 +1,5 @@
-@if (task$ | async; as tasks) {
-	@if (tasks.length > 0) {
-		@for (item of tasks; track $index) {
-			<p>{{item.description}}</p>
-		}
+@if (todoService.todoList().length > 0) {
+	@for (item of todoService.todoList(); track $index) {
+		<p>{{item.description}}</p>
 	}
 }

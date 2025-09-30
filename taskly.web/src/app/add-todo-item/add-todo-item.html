@@ -1,0 +1,4 @@
+<form [formGroup]="addTodoForm" (submit)="addTodoItem()">
+	<input id="description" type="text" formControlName="description" placeholder="Add your new Todo" />
+	<button type="submit" class="primary">Add Todo</button>
+</form>
