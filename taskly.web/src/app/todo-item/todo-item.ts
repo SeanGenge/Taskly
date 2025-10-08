@@ -1,4 +1,4 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, input, inject } from '@angular/core';
 import { Task } from '../interfaces/task';
 import { TodoService } from '../services/todo-service';
 
@@ -9,7 +9,7 @@ import { TodoService } from '../services/todo-service';
   styleUrl: './todo-item.css'
 })
 export class TodoItem {
-  @Input() item!: Task;
+  readonly item = input.required<Task>();
   todoService = inject(TodoService);
   
   deleteItem(id: string) {
