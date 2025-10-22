@@ -11,7 +11,9 @@ export default function TodoPage() {
 		const fetchData = async () => {
 			const response = await getTodos();
 			setTodoItems(response);
+			console.log(response);
 		};
+		
 		fetchData();
 	}, []);
 
