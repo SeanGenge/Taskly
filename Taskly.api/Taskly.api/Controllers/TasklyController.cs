@@ -34,6 +34,8 @@ namespace Taskly.api.Controllers
             {
                 Id = Guid.NewGuid(),
                 Description = request.Description,
+                IsCompleted = false,
+                Time = DateTime.Now,
             };
 
             // Save the todo item to the in memory db and save changes
