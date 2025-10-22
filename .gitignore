@@ -1,0 +1,16 @@
+# .NET
+**/bin/
+**/obj/
+**/.vs/
+
+# Node/Angular (anywhere in the repo)
+**/node_modules/
+**/dist/
+**/.angular/cache/
+**/coverage/
+
+# Misc
+*.user
+*.suo
+*.pdb
+*.log

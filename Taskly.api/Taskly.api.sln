@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36414.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taskly.api", "Taskly.api\Taskly.api.csproj", "{18A26845-4402-4403-A926-073A7E9E0A6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taskly.tests", "Taskly.tests\Taskly.tests.csproj", "{1109F66A-51F6-458B-B8E7-DC28B873BBAB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{18A26845-4402-4403-A926-073A7E9E0A6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18A26845-4402-4403-A926-073A7E9E0A6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18A26845-4402-4403-A926-073A7E9E0A6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18A26845-4402-4403-A926-073A7E9E0A6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1109F66A-51F6-458B-B8E7-DC28B873BBAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1109F66A-51F6-458B-B8E7-DC28B873BBAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1109F66A-51F6-458B-B8E7-DC28B873BBAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1109F66A-51F6-458B-B8E7-DC28B873BBAB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4B674158-6041-4DFF-86A8-C29995A7822E}
+	EndGlobalSection
+EndGlobal
