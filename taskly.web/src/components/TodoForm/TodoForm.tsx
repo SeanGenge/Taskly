@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { type AddTodoItemDTO } from "../../types/types";
+import styles from './TodoForm.module.css';
 
 type props = {
 	onAdd: (item: AddTodoItemDTO) => void;
@@ -28,7 +29,7 @@ export default function TodoForm({ onAdd }: props) {
 				<div className="col-sm-12 col-md-10">
 					<input
 						id="description"
-						className="form-control add-item"
+						className={`form-control ${styles.addItem}`}
 						type="text"
 						placeholder="Type your task here..."
 						value={description}

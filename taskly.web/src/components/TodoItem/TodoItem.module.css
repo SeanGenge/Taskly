@@ -1,0 +1,8 @@
+.todoItem {
+	text-align: left;
+}
+
+.todoItemContainer {
+	background-color: #E0E0E0;
+	padding: 1rem;
+}
