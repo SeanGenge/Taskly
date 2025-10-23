@@ -6,7 +6,7 @@ export type Task = {
 };
 
 export type TodoItemDTO = {
-	description: string;
+	description?: string;
 	isCompleted?: boolean;
 	time?: string;
 };

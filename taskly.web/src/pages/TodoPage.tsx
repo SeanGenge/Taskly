@@ -14,6 +14,7 @@ export default function TodoPage() {
 	useEffect(() => {
 		const fetchData = async () => {
 			const response = await getTodos();
+			
 			setTodoItems(response);
 		};
 		
@@ -55,8 +56,8 @@ export default function TodoPage() {
 			// Id is available, attempt to find the item to edit
 			// Displays the modal to edit the todo item
 			const item = todoItems.find(i => i.id === id) ?? null;
-
 			if (item == null) return;
+			
 			setEditingTask(item);
 		}
 		
@@ -67,12 +68,26 @@ export default function TodoPage() {
 		setOpenTodoModal(false);
 		setEditingTask(null);
 	}
+	
+	async function onToggleComplete(id: string, checked: boolean) {
+		const item = todoItems.find(i => i.id === id) ?? null;
+		if (item == null) return;
+		
+		// Update the item on the back-end
+		// Flipping the checked value
+		const updated = await updateTodoItem(id,
+		{
+			isCompleted: !checked,
+		});
+		
+		setTodoItems(prev => prev.map(t => (t.id === updated.id ? updated : t)));
+	}
 
 	return (
 		<div className="container mt-3">
 			{/* <TodoForm onAdd={handleAdd} /> */}
 			<TodoHeader openModal={openModal} />
-			<TodoList todoItems={todoItems} onDelete={handleDelete} openModal={openModal} />
+			<TodoList todoItems={todoItems} onDelete={handleDelete} openModal={openModal} onToggleComplete={onToggleComplete} />
 			<TodoModal open={openTodoModal} handleClose={handleClose} todoItem={editingTask} handleUpdate={handleUpdate} handleAdd={handleAdd} />
 		</div>
 	);
