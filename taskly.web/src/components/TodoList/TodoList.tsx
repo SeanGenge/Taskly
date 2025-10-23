@@ -3,16 +3,17 @@ import TodoItem from "../TodoItem/TodoItem";
 
 type props = {
 	todoItems: Task[];
-	onDelete: (id: string) => void
+	onUpdate: (id: string) => void;
+	onDelete: (id: string) => void;
 }
 
-export default function TodoList({ todoItems, onDelete }: props) {
+export default function TodoList({ todoItems, onUpdate, onDelete }: props) {
 	return (
 		<div>
 				{
 					todoItems.map(t => {
 						return (
-							<TodoItem todoItem={t} onDelete={onDelete} />
+							<TodoItem key={t.id} todoItem={t} onDelete={onDelete} onUpdate={onUpdate} />
 						);
 					})
 				}

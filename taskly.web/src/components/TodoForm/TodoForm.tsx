@@ -1,9 +1,9 @@
 import { useState, type FormEvent } from "react";
-import { type AddTodoItemDTO } from "../../types/types";
+import { type TodoItemDTO } from "../../types/types";
 import styles from './TodoForm.module.css';
 
 type props = {
-	onAdd: (item: AddTodoItemDTO) => void;
+	onAdd: (item: TodoItemDTO) => void;
 };
 
 export default function TodoForm({ onAdd }: props) {
@@ -15,7 +15,7 @@ export default function TodoForm({ onAdd }: props) {
 		e.preventDefault();
 		if (!value) return;
 		
-		const newTodoItem: AddTodoItemDTO = {
+		const newTodoItem: TodoItemDTO = {
 			description: description
 		}
 		

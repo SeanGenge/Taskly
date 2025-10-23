@@ -59,5 +59,20 @@ namespace Taskly.api.Controllers
 
             return Ok(item);
         }
+
+        [HttpPatch("{id:guid}")]
+        public async Task<IActionResult> Patch(Guid id, [FromBody] UpdateTodoItemDTO dto)
+        {
+            // Attempt to find the item
+            var item = await dbContext.TodoItems.FindAsync(id);
+            if (item is null) return NotFound();
+
+            // Check which fields needs to be updated and update accordingly
+            if (dto.Description is not null) item.Description = dto.Description;
+            if (dto.IsCompleted.HasValue) item.IsCompleted = dto.IsCompleted.Value;
+
+            await dbContext.SaveChangesAsync();
+            return Ok(item);
+        }
     }
 }

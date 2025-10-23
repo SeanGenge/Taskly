@@ -1,5 +1,5 @@
 import axios from "axios";
-import { type Task, type AddTodoItemDTO } from "../types/types";
+import type { Task, TodoItemDTO } from "../types/types";
 
 // Fetch all todos from API
 export async function getTodos() {
@@ -10,7 +10,7 @@ export async function getTodos() {
 
 
 // Add todo item
-export async function addTodoItem(todoItem: AddTodoItemDTO) {
+export async function addTodoItem(todoItem: TodoItemDTO) {
 	const res = await axios.post<Task>("/api/taskly", todoItem);
 	
 	return res.data;
@@ -19,6 +19,13 @@ export async function addTodoItem(todoItem: AddTodoItemDTO) {
 // Delete todo item
 export async function deleteTodoItem(id: string) {
 	const res = await axios.delete<Task>(`/api/taskly/${id}`);
+	
+	return res.data;
+}
+
+// Update todo item
+export async function updateTodoItem(id: string, changes: TodoItemDTO) {
+	const res = await axios.patch<Task>(`/api/taskly/${id}`, changes);
 	
 	return res.data;
 }
