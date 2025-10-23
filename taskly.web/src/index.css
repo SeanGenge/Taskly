@@ -1,0 +1,21 @@
+body {
+	background-color: #12161d;
+	color: white;
+}
+
+.form-control,
+.form-control:focus {
+	background-color: #1d222c;
+	color: white;
+}
+
+.form-control::placeholder {
+	color: white;
+}
+
+.modal .modal-content {
+	background-color: #1d222c;
+	color: white;
+	border: 1px solid #2a3442;
+	border-radius: 14px;
+}

@@ -3,6 +3,24 @@
 }
 
 .todoItemContainer {
-	background-color: #E0E0E0;
+	background-color: #1d222c;
 	padding: 1rem;
+}
+
+.button {
+	margin-right: 1rem;
+	margin-top: 0.5rem;
+}
+
+.completed {
+	text-decoration: line-through;
+	color: #808080;
+}
+
+@media (min-width: 768px) {
+	.button {
+		margin-right: 1rem;
+		padding: 0.5rem;
+		width: 4rem;
+	}
 }

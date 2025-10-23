@@ -1,9 +1,8 @@
 // src/features/todos/components/TodoModal.tsx
 import { useEffect, useState, type FormEvent, useRef } from "react";
 import type { Task } from "../../types/types";
-import { Modal, Button, Form, InputGroup } from "react-bootstrap";
+import { Modal, Button, Form } from "react-bootstrap";
 import type { TodoItemDTO } from "../../types/types";
-import DatePicker from "react-datepicker";
 
 type props = {
 	open: boolean;
@@ -66,15 +65,22 @@ export default function TodoModal({ open, handleClose, todoItem, handleUpdate, h
 	}
 
   return (
-  	<Modal show={open} onHide={onClose} onEntered={() => descriptionRef.current?.focus()}>
+  	<Modal className="modal" show={open} onHide={onClose} onEntered={() => descriptionRef.current?.focus()}>
 		<Modal.Header closeButton>
-			<Modal.Title>{todoItem ? "Edit" : "Create a New"} Todo item</Modal.Title>
+			<Modal.Title>{todoItem ? "Edit" : "Create a New"} Task</Modal.Title>
 		</Modal.Header>
 		<Modal.Body>
 			<Form id="todoForm" noValidate validated={validated} onSubmit={handleSubmit}>
 				<Form.Group className="mb-3" controlId="formBasicPassword">
-					<Form.Label>Description</Form.Label>
-					<Form.Control type="text" ref={descriptionRef} placeholder="Type your task here..." value={description} onChange={(e) => setDescription(e.target.value)} required />
+					<Form.Label>Task</Form.Label>
+					<Form.Control
+						type="text"
+						ref={descriptionRef}
+						placeholder="Type your task here..."
+						value={description}
+						onChange={(e) => setDescription(e.target.value)}
+						required
+					/>
 					<Form.Control.Feedback type="invalid">Please write a task</Form.Control.Feedback>
 				</Form.Group>
 			</Form>

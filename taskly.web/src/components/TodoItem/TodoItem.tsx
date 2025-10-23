@@ -1,6 +1,6 @@
 import type { Task } from "../../types/types";
 import styles from './TodoItem.module.css';
-import { Form } from "react-bootstrap";
+import { Form, Button, Row, Col } from "react-bootstrap";
 
 type props = {
 	todoItem: Task;
@@ -11,22 +11,22 @@ type props = {
 
 export default function TodoItem({ todoItem, openModal, onDelete, onToggleComplete }: props) {
 	return (
-		<div className={`${styles.todoItemContainer} row my-3 rounded`}>
-			<div className="col-1 d-flex align-items-center">
+		<Row className={`${styles.todoItemContainer} my-3 rounded`}>
+			<Col xs={1} className="d-flex align-items-center justify-content-center">
 				<Form.Check
 					type="checkbox"
 					checked={todoItem.isCompleted}
 					// Passing the opposite checked value. Reads nicer in toggle function
 					onChange={(e) => onToggleComplete(todoItem.id, !e.currentTarget.checked)}
 				/>
-			</div>
-			<div className={`col-8 ${styles.todoItem}`}>
-				<span>{todoItem.description}</span>
-			</div>
-			<div className="col-4 d-flex align-items-center justify-content-end">
-				<button className="btn btn-warning btn-sm" onClick={() => openModal(todoItem.id)}>Edit</button>
-				<button className="btn btn-danger btn-sm" onClick={() => onDelete(todoItem.id)}>Delete</button>
-			</div>
-		</div>
+			</Col>
+			<Col xs={8} className={`d-flex align-items-center ${styles.todoItem} ${todoItem.isCompleted ? styles.completed : ''}`}>
+				{todoItem.description}
+			</Col>
+			<Col xs={12} md={3} className="d-flex align-items-center justify-content-md-end">
+				<Button className={`btn btn-sm ${styles.button}`} variant="outline-warning" onClick={() => openModal(todoItem.id)}>Edit</Button>
+				<Button className={`btn btn-sm ${styles.button}`} variant="outline-danger" onClick={() => onDelete(todoItem.id)}>Delete</Button>
+			</Col>
+		</Row>
 	);
 }
