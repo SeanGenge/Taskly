@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { getTodos, addTodoItem, deleteTodoItem, updateTodoItem } from "../services/HTTPService";
 import type { Task, TodoItemDTO } from "../types/types";
-import TodoForm from "../components/TodoForm/TodoForm";
+// import TodoForm from "../components/TodoForm/TodoForm";
 import TodoList from "../components/TodoList/TodoList";
 import TodoModal from "../components/TodoModal/TodoModal";
+import TodoHeader from "../components/TodoHeader/TodoHeader";
 
 export default function TodoPage() {
 	const [todoItems, setTodoItems] = useState<Task[]>([]);
@@ -33,7 +34,7 @@ export default function TodoPage() {
 		setTodoItems(prev => prev.filter(t => t.id !== id));
 	}
 	
-	async function handleSave(updatedItem: TodoItemDTO) {
+	async function handleUpdate(updatedItem: TodoItemDTO) {
 		// Handles saving the updated todo item
 		if (!editingTask) return;
 		
@@ -49,13 +50,16 @@ export default function TodoPage() {
 		setEditingTask(null);
 	}
 	
-	function handleUpdate(id: string) {
-		// Displays the modal to edit the todo item
-		const item = todoItems.find(i => i.id === id) ?? null;
+	function openModal(id?: string) {
+		if (id) {
+			// Id is available, attempt to find the item to edit
+			// Displays the modal to edit the todo item
+			const item = todoItems.find(i => i.id === id) ?? null;
+
+			if (item == null) return;
+			setEditingTask(item);
+		}
 		
-		if (item == null) return;
-		
-		setEditingTask(item);
 		setOpenTodoModal(true);
 	}
 	
@@ -66,9 +70,10 @@ export default function TodoPage() {
 
 	return (
 		<div className="container mt-3">
-			<TodoForm onAdd={handleAdd} />
-			<TodoList todoItems={todoItems} onDelete={handleDelete} onUpdate={handleUpdate} />
-			<TodoModal open={openTodoModal} handleClose={handleClose} todoItem={editingTask} handleSave={handleSave} />
+			{/* <TodoForm onAdd={handleAdd} /> */}
+			<TodoHeader openModal={openModal} />
+			<TodoList todoItems={todoItems} onDelete={handleDelete} openModal={openModal} />
+			<TodoModal open={openTodoModal} handleClose={handleClose} todoItem={editingTask} handleUpdate={handleUpdate} handleAdd={handleAdd} />
 		</div>
 	);
 }

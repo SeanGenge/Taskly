@@ -1,11 +1,10 @@
 import './App.css'
-import Header from './components/Header/Header'
 import TodoPage from './pages/TodoPage'
 
 function App() {
   return (
     <>
-      <Header />
+      <h1>Taskly</h1>
       <TodoPage />
     </>
   )
