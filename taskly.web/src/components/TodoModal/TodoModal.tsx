@@ -52,7 +52,7 @@ export default function TodoModal({ open, handleClose, todoItem, handleUpdate, h
 		}
 		
 		handleClose();
-		
+		setDescription("");
 		setValidated(false);
 	}
 	
