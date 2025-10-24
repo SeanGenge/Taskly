@@ -51,6 +51,7 @@ namespace Taskly.api.Controllers
 
                 TaskDTO response = new TaskDTO
                 {
+                    Id = domainModelTask.Id,
                     Name = domainModelTask.Name,
                     Description = domainModelTask.Description,
                     IsCompleted = domainModelTask.IsCompleted,

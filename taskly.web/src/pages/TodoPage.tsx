@@ -22,7 +22,7 @@ export default function TodoPage() {
 	}, []);
 
 	async function handleAdd(todoItem: TaskDTO) {
-		const created = await addTodoItem(todoItem);
+		const created:Task = await addTodoItem(todoItem);
 		
 		// Update the todo list with the updated items
 		setTodoItems((prev) => [...prev, created]);
@@ -40,10 +40,7 @@ export default function TodoPage() {
 		if (!editingTask) return;
 		
 		// Call the back-end API to update the Todo item
-		const updated = await updateTodoItem(editingTask.id,
-		{
-			name: updatedItem.name,
-		});
+		const updated: Task = await updateTodoItem(editingTask.id, updatedItem);
 		
 		// Manually update the updated item on the front-end
 		setTodoItems(prev => prev.map(t => (t.id === updated.id ? updated : t)));
