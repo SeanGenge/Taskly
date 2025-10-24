@@ -11,7 +11,7 @@ type props = {
 
 export default function TodoItem({ todoItem, openModal, onDelete, onToggleComplete }: props) {
 	return (
-		<Row className={`${styles.todoItemContainer} my-3 rounded`}>
+		<Row className={`${styles.todoItemContainer} ${todoItem.isCompleted ? styles.completed : ''} my-3 rounded`}>
 			<Col xs={1} className="d-flex align-items-center justify-content-center">
 				<Form.Check
 					type="checkbox"
@@ -20,7 +20,7 @@ export default function TodoItem({ todoItem, openModal, onDelete, onToggleComple
 					onChange={(e) => onToggleComplete(todoItem.id, !e.currentTarget.checked)}
 				/>
 			</Col>
-			<Col xs={8} className={`d-flex align-items-center ${styles.todoItem} ${todoItem.isCompleted ? styles.completed : ''}`}>
+			<Col xs={8} className={`d-flex align-items-center ${styles.todoItem} ${todoItem.isCompleted ? styles.completedText : ''}`}>
 				{todoItem.description}
 			</Col>
 			<Col xs={12} md={3} className="d-flex align-items-center justify-content-md-end">
