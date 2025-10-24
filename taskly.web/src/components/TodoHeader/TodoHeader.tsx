@@ -11,7 +11,7 @@ type props = {
 function TodoHeader({ openModal, handleAdd }: props) {
 	const [name, setName] = useState<string>("");
 	const [validated, setValidated] = useState<boolean>(false);
-	
+
 	function handleSubmit(e: FormEvent<HTMLFormElement>) {
 		const value = name.trim();
 
@@ -25,11 +25,11 @@ function TodoHeader({ openModal, handleAdd }: props) {
 
 			return;
 		}
-		
+
 		if (!value) return;
 
 		const newTask: TaskDTO = {
-			
+
 			name: name,
 		}
 
@@ -37,7 +37,7 @@ function TodoHeader({ openModal, handleAdd }: props) {
 		setName("");
 		setValidated(false);
 	}
-	
+
 	return (
 		<div className="row d-flex justify-content-center">
 			<div className="col-sm-12 col-md-10">

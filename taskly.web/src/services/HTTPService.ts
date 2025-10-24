@@ -1,31 +1,37 @@
 import axios from "axios";
-import type { Task, TaskDTO } from "../types/types";
+import type { Task, TaskDTO, Priority } from "../types/types";
 
-// Fetch all todos from API
-export async function getTodos() {
-	const res = await axios.get<Task[]>("/api/taskly");
-	
+export async function getTasks() {
+	// Fetch all tasks from API
+	const res = await axios.get<Task[]>("/api/tasks");
+
 	return res.data;
 }
 
+export async function getPriorities() {
+	// Fetch all priorities
+	const res = await axios.get<Priority[]>("/api/priorities");
 
-// Add todo item
-export async function addTodoItem(todoItem: TaskDTO) {
-	const res = await axios.post<Task>("/api/taskly", todoItem);
-	
 	return res.data;
 }
 
-// Delete todo item
-export async function deleteTodoItem(id: number) {
-	const res = await axios.delete<Task>(`/api/taskly/${id}`);
-	
+export async function addTask(todoItem: TaskDTO) {
+	// Add task
+	const res = await axios.post<Task>("/api/tasks", todoItem);
+
 	return res.data;
 }
 
-// Update todo item
-export async function updateTodoItem(id: number, changes: TaskDTO) {
-	const res = await axios.patch<Task>(`/api/taskly/${id}`, changes);
-	
+export async function deleteTask(id: number) {
+	// Delete task
+	const res = await axios.delete<Task>(`/api/tasks/${id}`);
+
+	return res.data;
+}
+
+export async function updateTask(id: number, changes: TaskDTO) {
+	// Update task
+	const res = await axios.patch<Task>(`/api/tasks/${id}`, changes);
+
 	return res.data;
 }

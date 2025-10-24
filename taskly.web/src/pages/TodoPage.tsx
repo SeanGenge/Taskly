@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getTodos, addTodoItem, deleteTodoItem, updateTodoItem } from "../services/HTTPService";
+import { getTasks, addTask, deleteTask, updateTask } from "../services/HTTPService";
 import type { Task, TaskDTO } from "../types/types";
 // import TodoForm from "../components/TodoForm/TodoForm";
 import TodoList from "../components/TodoList/TodoList";
@@ -13,72 +13,72 @@ export default function TodoPage() {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const response = await getTodos();
-			
+			const response = await getTasks();
+
 			setTodoItems(response);
 		};
-		
+
 		fetchData();
 	}, []);
 
 	async function handleAdd(todoItem: TaskDTO) {
-		const created:Task = await addTodoItem(todoItem);
-		
+		const created: Task = await addTask(todoItem);
+
 		// Update the todo list with the updated items
 		setTodoItems((prev) => [...prev, created]);
 	}
-	
+
 	async function handleDelete(id: number) {
-		await deleteTodoItem(id);
-		
+		await deleteTask(id);
+
 		// Remove the item from the state
 		setTodoItems(prev => prev.filter(t => t.id !== id));
 	}
-	
+
 	async function handleUpdate(updatedItem: TaskDTO) {
 		// Handles saving the updated todo item
 		if (!editingTask) return;
-		
+
 		// Call the back-end API to update the Todo item
-		const updated: Task = await updateTodoItem(editingTask.id, updatedItem);
-		
+		const updated: Task = await updateTask(editingTask.id, updatedItem);
+
 		// Manually update the updated item on the front-end
 		setTodoItems(prev => prev.map(t => (t.id === updated.id ? updated : t)));
 		setOpenTodoModal(false);
 		setEditingTask(null);
 	}
-	
+
 	function openModal(id?: number) {
 		if (id) {
 			// Id is available, attempt to find the item to edit
 			// Displays the modal to edit the todo item
 			const item = todoItems.find(i => i.id === id) ?? null;
 			if (item == null) return;
-			
+
 			setEditingTask(item);
 		}
-		
+
 		setOpenTodoModal(true);
 	}
-	
+
 	function handleClose() {
 		setOpenTodoModal(false);
 		setEditingTask(null);
 	}
-	
+
 	async function onToggleComplete(id: number, checked: boolean) {
 		const item = todoItems.find(i => i.id === id) ?? null;
 		if (item == null) return;
-		
+
 		// Update the item on the back-end
 		// Flipping the checked value
-		const updated = await updateTodoItem(id,
-		{
-			// Requires the name field to be passed
-			name: item.name,
-			isCompleted: !checked,
-		});
-		
+		const updated = await updateTask(id,
+			{
+				// Requires the name field to be passed
+				name: item.name,
+				isCompleted: !checked,
+			});
+
 		setTodoItems(prev => prev.map(t => (t.id === updated.id ? updated : t)));
 	}
 

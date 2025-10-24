@@ -19,3 +19,8 @@ export type TaskDTO = {
 	dateCreated?: string;
 	priorityId?: number;
 };
+
+export type Priority = {
+	id: number;
+	name: string;
+}

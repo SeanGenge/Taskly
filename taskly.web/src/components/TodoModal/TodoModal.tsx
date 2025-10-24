@@ -1,9 +1,10 @@
 // src/features/todos/components/TodoModal.tsx
 import { useEffect, useState, type FormEvent, useRef } from "react";
-import type { Task } from "../../types/types";
+import type { Task, Priority } from "../../types/types";
 import { Modal, Button, Form } from "react-bootstrap";
 import type { TaskDTO } from "../../types/types";
 import DatePicker from "react-datepicker";
+import { getPriorities } from "../../services/HTTPService";
 
 type props = {
 	open: boolean;
@@ -14,6 +15,7 @@ type props = {
 };
 
 export default function TodoModal({ open, handleClose, todoItem, handleUpdate, handleAdd }: props) {
+	const [priorities, setPriorities] = useState<Priority[]>([]);
 	const [name, setName] = useState<string>("");
 	const [description, setDescription] = useState<string>("");
 	const [dueDate, setDueDate] = useState<Date | null>(null);
@@ -22,10 +24,20 @@ export default function TodoModal({ open, handleClose, todoItem, handleUpdate, h
 	// Used to focus the description input on modal open
 	const nameRef = useRef<HTMLInputElement | null>(null);
 	const [validated, setValidated] = useState<boolean>(false);
-	
+
+	useEffect(() => {
+		const fetchData = async () => {
+			const response = await getPriorities();
+
+			setPriorities(response);
+		};
+
+		fetchData();
+	}, []);
+
 	useEffect(() => {
 		if (!todoItem) return;
-		
+
 		// Set the initial values for the properties
 		if (todoItem?.name) setName(todoItem.name);
 		if (todoItem?.description) setDescription(todoItem.description);
@@ -33,29 +45,30 @@ export default function TodoModal({ open, handleClose, todoItem, handleUpdate, h
 		if (todoItem?.isImportant) setIsImportant(todoItem.isImportant);
 		if (todoItem?.priorityId) setPriorityId(todoItem.priorityId);
 	}, [todoItem]);
-	
+
 	function handleSubmit(e: FormEvent<HTMLFormElement>) {
 		e.preventDefault();
-		
+
 		const form = e.currentTarget;
-		
+
 		if (form.checkValidity() === false) {
 			e.stopPropagation();
 			setValidated(true);
-			
+
 			return;
 		}
-		
+
 		if (name == undefined) return;
-		
+
 		// Create the updated object
 		const newTodoItem: TaskDTO = {
 			name: name,
 			isImportant: isImportant,
 			dueDate: dueDate?.toISOString(),
 			description: description,
+			priorityId: priorityId,
 		}
-		
+
 		if (todoItem) {
 			// Updating an existing item
 			handleUpdate(newTodoItem);
@@ -64,12 +77,12 @@ export default function TodoModal({ open, handleClose, todoItem, handleUpdate, h
 			// Creating a new item
 			handleAdd(newTodoItem);
 		}
-		
+
 		handleClose();
 		setName("");
 		setValidated(false);
 	}
-	
+
 	function onClose() {
 		// Reset the values
 		setName("");
@@ -77,56 +90,68 @@ export default function TodoModal({ open, handleClose, todoItem, handleUpdate, h
 		setDueDate(null);
 		setDescription("");
 		setPriorityId(1);
-		
+
 		setValidated(false);
-		
+
 		handleClose();
 	}
 
-  return (
-  	<Modal className="modal" show={open} onHide={onClose} onEntered={() => nameRef.current?.focus()}>
-		<Modal.Header closeButton>
-			<Modal.Title>{todoItem ? "Edit" : "Create a New"} Task</Modal.Title>
-		</Modal.Header>
-		<Modal.Body>
-			<Form id="todoForm" noValidate validated={validated} onSubmit={handleSubmit}>
-				<Form.Group className="mb-3" controlId="taskName">
-					<Form.Label>Task</Form.Label>
-					<Form.Control
-						type="text"
-						ref={nameRef}
-						placeholder="Type your task here..."
-						value={name}
-						onChange={(e) => setName(e.target.value)}
-						required
+	return (
+		<Modal className="modal" show={open} onHide={onClose} onEntered={() => nameRef.current?.focus()}>
+			<Modal.Header closeButton>
+				<Modal.Title>{todoItem ? "Edit" : "Create a New"} Task</Modal.Title>
+			</Modal.Header>
+			<Modal.Body>
+				<Form id="todoForm" noValidate validated={validated} onSubmit={handleSubmit}>
+					<Form.Group className="mb-3" controlId="taskName">
+						<Form.Label>Task</Form.Label>
+						<Form.Control
+							type="text"
+							ref={nameRef}
+							placeholder="Type your task here..."
+							value={name}
+							onChange={(e) => setName(e.target.value)}
+							required
+						/>
+						<Form.Control.Feedback type="invalid">Please write a task</Form.Control.Feedback>
+					</Form.Group>
+					<Form.Check
+						type='checkbox'
+						label='important'
+						id='isImportant'
+						checked={isImportant}
+						onChange={(e) => setIsImportant(e.currentTarget.checked)}
 					/>
-					<Form.Control.Feedback type="invalid">Please write a task</Form.Control.Feedback>
-				</Form.Group>
-				  <Form.Check
-					  type='checkbox'
-					  label='important'
-					  id='isImportant'
-					  checked={isImportant}
-					  onChange={(e) => setIsImportant(e.currentTarget.checked)}
-				  />
-				  <Form.Group className="mb-3" controlId="dueDate">
-					  <Form.Label className="me-2">Due Date:</Form.Label>
-					  <DatePicker selected={dueDate} onChange={(date) => setDueDate(date)} />
-				  </Form.Group>
-				  <Form.Group className="mb-3" controlId="description">
-					  <Form.Label>Description</Form.Label>
-					  <Form.Control as="textarea" rows={4} value={description} onChange={(e) => setDescription(e.target.value)} />
-				  </Form.Group>
-			</Form>
-		</Modal.Body>
-		<Modal.Footer>
-			<Button variant="secondary" onClick={onClose}>
-				Close
-			</Button>
-			<Button variant="primary" type="submit" form="todoForm">
-				{todoItem ? "Update todo item" : "Create new todo item"}
-			</Button>
-		</Modal.Footer>
-	</Modal>
-  );
+					<Form.Group className="mb-3" controlId="dueDate">
+						<Form.Label className="me-2">Due Date:</Form.Label>
+						<DatePicker selected={dueDate} onChange={(date) => setDueDate(date)} />
+					</Form.Group>
+					<Form.Group className="mb-3" controlId="priority">
+						<Form.Label>Priority</Form.Label>
+						<Form.Select aria-label="Default select example" value={priorityId} onChange={(e) => setPriorityId(Number(e.target.value))}>
+							{
+								priorities.map(p => {
+									return (
+										<option key={p.id} value={p.id}>{p.name}</option>
+									);
+								})
+							}
+						</Form.Select>
+					</Form.Group>
+					<Form.Group className="mb-3" controlId="description">
+						<Form.Label>Description</Form.Label>
+						<Form.Control as="textarea" rows={4} value={description} onChange={(e) => setDescription(e.target.value)} />
+					</Form.Group>
+				</Form>
+			</Modal.Body>
+			<Modal.Footer>
+				<Button variant="secondary" onClick={onClose}>
+					Close
+				</Button>
+				<Button variant="primary" type="submit" form="todoForm">
+					{todoItem ? "Update todo item" : "Create new todo item"}
+				</Button>
+			</Modal.Footer>
+		</Modal>
+	);
 }

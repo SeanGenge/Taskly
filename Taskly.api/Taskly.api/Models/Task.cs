@@ -16,6 +16,6 @@ namespace Taskly.api.Models
         public DateTime DateCreated { get; set; }
         public int PriorityId { get; set; }
 
-        public Priority? Priority { get; set; }
+        public virtual Priority? Priority { get; set; }
     }
 }

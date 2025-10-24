@@ -6,11 +6,11 @@ namespace Taskly.api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TasklyController : Controller
+    public class TasksController : Controller
     {
         private readonly TasklyDbContext dbContext;
 
-        public TasklyController(TasklyDbContext dbContext)
+        public TasksController(TasklyDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
