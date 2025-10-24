@@ -86,7 +86,7 @@ export default function TodoPage() {
 		<div className="container mt-3">
 			<TodoHeader openModal={openModal} handleAdd={handleAdd} />
 			<TodoList todoItems={todoItems} onDelete={handleDelete} openModal={openModal} onToggleComplete={onToggleComplete} />
-			<TodoModal open={openTodoModal} handleClose={handleClose} todoItem={editingTask} handleUpdate={handleUpdate} handleAdd={handleAdd} />
+			{openTodoModal && <TodoModal key={editingTask?.id ?? 'new'} open={openTodoModal} handleClose={handleClose} todoItem={editingTask} handleUpdate={handleUpdate} handleAdd={handleAdd} />}
 		</div>
 	);
 }

@@ -105,7 +105,12 @@ namespace Taskly.api.Controllers
                 if (dto.Description is not null) item.Description = dto.Description;
                 if (dto.DueDate.HasValue) item.DueDate = dto.DueDate.Value;
                 if (dto.DateCompleted.HasValue) item.DateCompleted = dto.DateCompleted.Value;
-                if (dto.IsCompleted.HasValue) item.IsCompleted = dto.IsCompleted.Value;
+                if (dto.IsCompleted.HasValue)
+                {
+                    item.IsCompleted = dto.IsCompleted.Value;
+                    // Also set the completion date
+                    item.DateCompleted = DateTime.Now;
+                }
                 if (dto.IsImportant.HasValue) item.IsImportant = dto.IsImportant.Value;
 
                 // Just check that priority id is a valid id
