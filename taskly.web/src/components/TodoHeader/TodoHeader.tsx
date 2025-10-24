@@ -1,19 +1,19 @@
 import { useState, type FormEvent } from "react";
-import { type TodoItemDTO } from "../../types/types";
+import { type TaskDTO } from "../../types/types";
 import styles from './TodoHeader.module.css';
 import { Form } from "react-bootstrap";
 
 type props = {
-	openModal: (id?: string) => void;
-	handleAdd: (item: TodoItemDTO) => void;
+	openModal: (id?: number) => void;
+	handleAdd: (item: TaskDTO) => void;
 };
 
 function TodoHeader({ openModal, handleAdd }: props) {
-	const [description, setDescription] = useState<string>("");
+	const [name, setName] = useState<string>("");
 	const [validated, setValidated] = useState<boolean>(false);
 	
 	function handleSubmit(e: FormEvent<HTMLFormElement>) {
-		const value = description.trim();
+		const value = name.trim();
 
 		e.preventDefault();
 
@@ -28,12 +28,13 @@ function TodoHeader({ openModal, handleAdd }: props) {
 		
 		if (!value) return;
 
-		const newTodoItem: TodoItemDTO = {
-			description: description
+		const newTask: TaskDTO = {
+			
+			name: name,
 		}
 
-		handleAdd(newTodoItem);
-		setDescription("");
+		handleAdd(newTask);
+		setName("");
 		setValidated(false);
 	}
 	
@@ -46,8 +47,8 @@ function TodoHeader({ openModal, handleAdd }: props) {
 						className={`form-control ${styles.input}`}
 						type="text"
 						placeholder="Type your task here..."
-						value={description}
-						onChange={(e) => setDescription(e.target.value)}
+						value={name}
+						onChange={(e) => setName(e.target.value)}
 						aria-label="Add new task"
 						required
 					/>

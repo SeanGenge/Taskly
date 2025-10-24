@@ -2,25 +2,25 @@
 import { useEffect, useState, type FormEvent, useRef } from "react";
 import type { Task } from "../../types/types";
 import { Modal, Button, Form } from "react-bootstrap";
-import type { TodoItemDTO } from "../../types/types";
+import type { TaskDTO } from "../../types/types";
 
 type props = {
 	open: boolean;
 	handleClose: () => void;
 	todoItem: Task | null;
-	handleUpdate: (updateItem: TodoItemDTO) => void;
-	handleAdd: (item: TodoItemDTO) => void;
+	handleUpdate: (updateItem: TaskDTO) => void;
+	handleAdd: (item: TaskDTO) => void;
 };
 
 export default function TodoModal({ open, handleClose, todoItem, handleUpdate, handleAdd }: props) {
-	const [description, setDescription] = useState<string>("")
+	const [name, setName] = useState<string>("")
 	// Used to focus the description input on modal open
-	const descriptionRef = useRef<HTMLInputElement | null>(null);
+	const nameRef = useRef<HTMLInputElement | null>(null);
 	const [validated, setValidated] = useState<boolean>(false);
 	
 	useEffect(() => {
 		if (todoItem && todoItem?.description) {
-			setDescription(todoItem?.description)
+			setName(todoItem?.description)
 		}
 	}, [todoItem]);
 	
@@ -36,10 +36,10 @@ export default function TodoModal({ open, handleClose, todoItem, handleUpdate, h
 			return;
 		}
 		
-		if (description == undefined) return;
+		if (name == undefined) return;
 		
-		const newTodoItem: TodoItemDTO = {
-			description: description
+		const newTodoItem: TaskDTO = {
+			name: name
 		}
 		
 		if (todoItem) {
@@ -52,20 +52,20 @@ export default function TodoModal({ open, handleClose, todoItem, handleUpdate, h
 		}
 		
 		handleClose();
-		setDescription("");
+		setName("");
 		setValidated(false);
 	}
 	
 	function onClose() {
 		// Reset the values
-		setDescription("");
+		setName("");
 		setValidated(false);
 		
 		handleClose();
 	}
 
   return (
-  	<Modal className="modal" show={open} onHide={onClose} onEntered={() => descriptionRef.current?.focus()}>
+  	<Modal className="modal" show={open} onHide={onClose} onEntered={() => nameRef.current?.focus()}>
 		<Modal.Header closeButton>
 			<Modal.Title>{todoItem ? "Edit" : "Create a New"} Task</Modal.Title>
 		</Modal.Header>
@@ -75,10 +75,10 @@ export default function TodoModal({ open, handleClose, todoItem, handleUpdate, h
 					<Form.Label>Task</Form.Label>
 					<Form.Control
 						type="text"
-						ref={descriptionRef}
+						ref={nameRef}
 						placeholder="Type your task here..."
-						value={description}
-						onChange={(e) => setDescription(e.target.value)}
+						value={name}
+						onChange={(e) => setName(e.target.value)}
 						required
 					/>
 					<Form.Control.Feedback type="invalid">Please write a task</Form.Control.Feedback>

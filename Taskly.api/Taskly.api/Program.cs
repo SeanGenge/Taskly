@@ -12,7 +12,11 @@ builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<TasklyDbContext>(options => options.UseInMemoryDatabase("TodoDb"));
+// Used if you want to use an in memory database
+//builder.Services.AddDbContext<TasklyDbContext>(options => options.UseInMemoryDatabase("TodoDb"));
+builder.Services.AddDbContext<TasklyDbContext>(options => options.UseSqlServer(
+    builder.Configuration.GetConnectionString("TasklyConnection")
+    ));
 
 var app = builder.Build();
 

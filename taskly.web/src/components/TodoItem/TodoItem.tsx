@@ -4,9 +4,9 @@ import { Form, Button, Row, Col } from "react-bootstrap";
 
 type props = {
 	todoItem: Task;
-	openModal: (id?: string) => void;
-	onDelete: (id: string) => void;
-	onToggleComplete: (id: string, checked: boolean) => void;
+	openModal: (id?: number) => void;
+	onDelete: (id: number) => void;
+	onToggleComplete: (id: number, checked: boolean) => void;
 }
 
 export default function TodoItem({ todoItem, openModal, onDelete, onToggleComplete }: props) {
@@ -21,7 +21,7 @@ export default function TodoItem({ todoItem, openModal, onDelete, onToggleComple
 				/>
 			</Col>
 			<Col xs={8} className={`d-flex align-items-center ${styles.todoItem} ${todoItem.isCompleted ? styles.completedText : ''}`}>
-				{todoItem.description}
+				{todoItem.name}
 			</Col>
 			<Col xs={12} md={3} className="d-flex align-items-center justify-content-md-end">
 				<Button className={`btn btn-sm ${styles.button}`} variant="outline-warning" onClick={() => openModal(todoItem.id)}>Edit</Button>

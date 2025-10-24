@@ -3,9 +3,9 @@ import TodoItem from "../TodoItem/TodoItem";
 
 type props = {
 	todoItems: Task[];
-	openModal: (id?: string) => void;
-	onDelete: (id: string) => void;
-	onToggleComplete: (id: string, checked: boolean) => void;
+	openModal: (id?: number) => void;
+	onDelete: (id: number) => void;
+	onToggleComplete: (id: number, checked: boolean) => void;
 }
 
 export default function TodoList({ todoItems, openModal, onDelete, onToggleComplete }: props) {

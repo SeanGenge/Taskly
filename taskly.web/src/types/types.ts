@@ -1,12 +1,21 @@
 export type Task = {
-	id: string;
+	id: number;
+	name: string;
 	description: string;
 	isCompleted: boolean;
-	time: string
+	dueDate: string;
+	isImportant: boolean;
+	dateCreated: string;
+	priorityId: number;
 };
 
-export type TodoItemDTO = {
+export type TaskDTO = {
+	name?: string;
 	description?: string;
 	isCompleted?: boolean;
-	time?: string;
+	dueDate?: string;
+	dateCompleted?: string;
+	isImportant?: boolean;
+	dateCreated?: string;
+	priorityId?: number;
 };

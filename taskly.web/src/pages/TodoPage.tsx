@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { getTodos, addTodoItem, deleteTodoItem, updateTodoItem } from "../services/HTTPService";
-import type { Task, TodoItemDTO } from "../types/types";
+import type { Task, TaskDTO } from "../types/types";
 // import TodoForm from "../components/TodoForm/TodoForm";
 import TodoList from "../components/TodoList/TodoList";
 import TodoModal from "../components/TodoModal/TodoModal";
@@ -21,28 +21,28 @@ export default function TodoPage() {
 		fetchData();
 	}, []);
 
-	async function handleAdd(todoItem: TodoItemDTO) {
+	async function handleAdd(todoItem: TaskDTO) {
 		const created = await addTodoItem(todoItem);
 		
 		// Update the todo list with the updated items
 		setTodoItems((prev) => [...prev, created]);
 	}
 	
-	async function handleDelete(id: string) {
+	async function handleDelete(id: number) {
 		await deleteTodoItem(id);
 		
 		// Remove the item from the state
 		setTodoItems(prev => prev.filter(t => t.id !== id));
 	}
 	
-	async function handleUpdate(updatedItem: TodoItemDTO) {
+	async function handleUpdate(updatedItem: TaskDTO) {
 		// Handles saving the updated todo item
 		if (!editingTask) return;
 		
 		// Call the back-end API to update the Todo item
 		const updated = await updateTodoItem(editingTask.id,
 		{
-			description: updatedItem.description,
+			name: updatedItem.name,
 		});
 		
 		// Manually update the updated item on the front-end
@@ -51,7 +51,7 @@ export default function TodoPage() {
 		setEditingTask(null);
 	}
 	
-	function openModal(id?: string) {
+	function openModal(id?: number) {
 		if (id) {
 			// Id is available, attempt to find the item to edit
 			// Displays the modal to edit the todo item
@@ -69,7 +69,7 @@ export default function TodoPage() {
 		setEditingTask(null);
 	}
 	
-	async function onToggleComplete(id: string, checked: boolean) {
+	async function onToggleComplete(id: number, checked: boolean) {
 		const item = todoItems.find(i => i.id === id) ?? null;
 		if (item == null) return;
 		
@@ -77,6 +77,8 @@ export default function TodoPage() {
 		// Flipping the checked value
 		const updated = await updateTodoItem(id,
 		{
+			// Requires the name field to be passed
+			name: item.name,
 			isCompleted: !checked,
 		});
 		
@@ -85,7 +87,6 @@ export default function TodoPage() {
 
 	return (
 		<div className="container mt-3">
-			{/* <TodoForm onAdd={handleAdd} /> */}
 			<TodoHeader openModal={openModal} handleAdd={handleAdd} />
 			<TodoList todoItems={todoItems} onDelete={handleDelete} openModal={openModal} onToggleComplete={onToggleComplete} />
 			<TodoModal open={openTodoModal} handleClose={handleClose} todoItem={editingTask} handleUpdate={handleUpdate} handleAdd={handleAdd} />
