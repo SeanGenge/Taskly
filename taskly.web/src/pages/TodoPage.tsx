@@ -5,6 +5,7 @@ import type { Task, TaskDTO } from "../types/types";
 import TodoList from "../components/TodoList/TodoList";
 import TodoModal from "../components/TodoModal/TodoModal";
 import TodoHeader from "../components/TodoHeader/TodoHeader";
+import styles from './TodoPage.module.css';
 
 export default function TodoPage() {
 	const [todoItems, setTodoItems] = useState<Task[]>([]);
@@ -83,9 +84,11 @@ export default function TodoPage() {
 	}
 
 	return (
-		<div className="container mt-3">
+		<div className="container mt-3 d-flex flex-column">
 			<TodoHeader openModal={openModal} handleAdd={handleAdd} />
-			<TodoList todoItems={todoItems} onDelete={handleDelete} openModal={openModal} onToggleComplete={onToggleComplete} />
+			<div className={`flex-grow-1 pe-4 ${styles.todoListScroll}`}>
+				<TodoList todoItems={todoItems} onDelete={handleDelete} openModal={openModal} onToggleComplete={onToggleComplete} />
+			</div>
 			{openTodoModal && <TodoModal key={editingTask?.id ?? 'new'} open={openTodoModal} handleClose={handleClose} todoItem={editingTask} handleUpdate={handleUpdate} handleAdd={handleAdd} />}
 		</div>
 	);
