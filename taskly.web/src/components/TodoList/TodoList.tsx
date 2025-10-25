@@ -1,3 +1,4 @@
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { type Task } from "../../types/types";
 import TodoItem from "../TodoItem/TodoItem";
 import styles from './TodoList.module.css';
@@ -10,9 +11,11 @@ type props = {
 }
 
 export default function TodoList({ todoItems, openModal, onDelete, onToggleComplete }: props) {
+	const [animationParent] = useAutoAnimate();
+	
 	return (
 		<>
-			<div className={`flex-grow-1 pe-4 mt-md-3 ${styles.todoListScroll}`}>
+			<div ref={animationParent} className={`flex-grow-1 pe-4 mt-md-3 ${styles.todoListScroll}`}>
 				{
 					todoItems.map(t => {
 						return (

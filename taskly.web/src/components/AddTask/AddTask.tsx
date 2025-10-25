@@ -1,6 +1,5 @@
 import { useState, type FormEvent } from "react";
 import { type TaskDTO } from "../../types/types";
-import styles from './TodoHeader.module.css';
 import { Form } from "react-bootstrap";
 
 type props = {
@@ -8,7 +7,7 @@ type props = {
 	handleAdd: (item: TaskDTO) => void;
 };
 
-function TodoHeader({ openModal, handleAdd }: props) {
+export default function Addtask({ openModal, handleAdd }: props) {
 	const [name, setName] = useState<string>("");
 	const [validated, setValidated] = useState<boolean>(false);
 
@@ -44,7 +43,7 @@ function TodoHeader({ openModal, handleAdd }: props) {
 				<Form noValidate validated={validated} onSubmit={handleSubmit}>
 					<Form.Control
 						id="description"
-						className={`form-control ${styles.input}`}
+						className={`form-control`}
 						type="text"
 						placeholder="Type your task here..."
 						value={name}
@@ -63,5 +62,3 @@ function TodoHeader({ openModal, handleAdd }: props) {
 		</div>
 	)
 }
-
-export default TodoHeader

@@ -1,15 +1,26 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { getTasks, addTask, deleteTask, updateTask } from "../services/HTTPService";
 import type { Task, TaskDTO } from "../types/types";
-// import TodoForm from "../components/TodoForm/TodoForm";
 import TodoList from "../components/TodoList/TodoList";
 import TodoModal from "../components/TodoModal/TodoModal";
-import TodoHeader from "../components/TodoHeader/TodoHeader";
+import AddTask from "../components/AddTask/AddTask";
+import SortFilter from "../components/SortFilter/SortFilter";
 
 export default function TodoPage() {
 	const [todoItems, setTodoItems] = useState<Task[]>([]);
 	const [editingTask, setEditingTask] = useState<Task | null>(null);
 	const [openTodoModal, setOpenTodoModal] = useState<boolean>(false);
+	const [hideCompleted, setHideCompleted] = useState(false);
+	
+	const filteredTasks = useMemo(() => {
+		let list = [...todoItems];
+		
+		if (hideCompleted) {
+			list = list.filter(t => !t.isCompleted);
+		}
+		
+		return list;
+	}, [todoItems, hideCompleted]);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -84,8 +95,9 @@ export default function TodoPage() {
 
 	return (
 		<div className="container mt-3 d-flex flex-column">
-			<TodoHeader openModal={openModal} handleAdd={handleAdd} />
-			<TodoList todoItems={todoItems} onDelete={handleDelete} openModal={openModal} onToggleComplete={onToggleComplete} />
+			<AddTask openModal={openModal} handleAdd={handleAdd} />
+			<SortFilter hideCompleted={hideCompleted} onHideCompleted={setHideCompleted} />
+			<TodoList todoItems={filteredTasks} onDelete={handleDelete} openModal={openModal} onToggleComplete={onToggleComplete} />
 			{openTodoModal && <TodoModal key={editingTask?.id ?? 'new'} open={openTodoModal} handleClose={handleClose} todoItem={editingTask} handleUpdate={handleUpdate} handleAdd={handleAdd} />}
 		</div>
 	);
