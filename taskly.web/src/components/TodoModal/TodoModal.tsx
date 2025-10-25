@@ -103,7 +103,7 @@ export default function TodoModal({ open, handleClose, todoItem, handleUpdate, h
 					/>
 					<Form.Group className="mb-3" controlId="dueDate">
 						<Form.Label className="me-2">Due Date:</Form.Label>
-						<DatePicker selected={dueDate} onChange={(date) => setDueDate(date)} />
+						<DatePicker selected={dueDate} onChange={(date) => setDueDate(date)} dateFormat="dd/MM/yyyy" placeholderText="dd/mm/yyyy" />
 					</Form.Group>
 					<Form.Group className="mb-3" controlId="priority">
 						<Form.Label>Priority</Form.Label>
