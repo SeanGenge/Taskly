@@ -1,10 +1,9 @@
 // src/features/todos/components/TodoModal.tsx
-import { useEffect, useState, type FormEvent, useRef } from "react";
+import { useState, type FormEvent, useRef } from "react";
 import type { Task, Priority } from "../../types/types";
 import { Modal, Button, Form } from "react-bootstrap";
 import type { TaskDTO } from "../../types/types";
 import DatePicker from "react-datepicker";
-import { getPriorities } from "../../services/HTTPService";
 
 type props = {
 	open: boolean;
@@ -12,10 +11,10 @@ type props = {
 	todoItem: Task | null;
 	handleUpdate: (updateItem: TaskDTO) => void;
 	handleAdd: (item: TaskDTO) => void;
+	priorities: Priority[];
 };
 
-export default function TodoModal({ open, handleClose, todoItem, handleUpdate, handleAdd }: props) {
-	const [priorities, setPriorities] = useState<Priority[]>([]);
+export default function TodoModal({ open, handleClose, todoItem, handleUpdate, handleAdd, priorities }: props) {
 	const [name, setName] = useState<string>(todoItem?.name ?? "");
 	const [description, setDescription] = useState<string>(todoItem?.description ?? "");
 	const [dueDate, setDueDate] = useState<Date | null>(todoItem?.dueDate ? new Date(todoItem.dueDate) : null);
@@ -23,16 +22,6 @@ export default function TodoModal({ open, handleClose, todoItem, handleUpdate, h
 	const [priorityId, setPriorityId] = useState<number>(todoItem?.priorityId ?? 1);
 	const nameRef = useRef<HTMLInputElement | null>(null);
 	const [validated, setValidated] = useState<boolean>(false);
-
-	useEffect(() => {
-		const fetchData = async () => {
-			const response = await getPriorities();
-
-			setPriorities(response);
-		};
-
-		fetchData();
-	}, []);
 
 	function handleSubmit(e: FormEvent<HTMLFormElement>) {
 		e.preventDefault();

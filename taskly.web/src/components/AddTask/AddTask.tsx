@@ -45,7 +45,7 @@ export default function Addtask({ openModal, handleAdd }: props) {
 						id="description"
 						className={`form-control`}
 						type="text"
-						placeholder="Type your task here..."
+						placeholder="Quick add task here..."
 						value={name}
 						onChange={(e) => setName(e.target.value)}
 						aria-label="Add new task"

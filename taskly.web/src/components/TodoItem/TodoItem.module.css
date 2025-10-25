@@ -37,6 +37,10 @@
 }
 
 @media (min-width: 768px) {
+	.todoItem {
+		padding-left: 2rem;
+	}
+	
 	.button {
 		margin-right: 1rem;
 		padding: 0.5rem;

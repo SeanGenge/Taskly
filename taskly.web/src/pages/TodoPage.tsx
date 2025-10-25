@@ -1,16 +1,20 @@
 import { useState, useEffect, useMemo } from "react";
-import { getTasks, addTask, deleteTask, updateTask } from "../services/HTTPService";
-import type { Task, TaskDTO } from "../types/types";
+import { getTasks, addTask, deleteTask, updateTask, getPriorities } from "../services/HTTPService";
+import type { Task, TaskDTO, Priority, SortMode, Order } from "../types/types";
 import TodoList from "../components/TodoList/TodoList";
 import TodoModal from "../components/TodoModal/TodoModal";
 import AddTask from "../components/AddTask/AddTask";
 import SortFilter from "../components/SortFilter/SortFilter";
 
 export default function TodoPage() {
+	const [priorities, setPriorities] = useState<Priority[]>([]);
 	const [todoItems, setTodoItems] = useState<Task[]>([]);
 	const [editingTask, setEditingTask] = useState<Task | null>(null);
 	const [openTodoModal, setOpenTodoModal] = useState<boolean>(false);
 	const [hideCompleted, setHideCompleted] = useState(false);
+	// Sorting tasks
+	const [sortMode, setSortMode] = useState<SortMode>("created");
+	const [order, setOrder] = useState<Order>("desc");
 	
 	const filteredTasks = useMemo(() => {
 		let list = [...todoItems];
@@ -19,14 +23,39 @@ export default function TodoPage() {
 			list = list.filter(t => !t.isCompleted);
 		}
 		
+		if (sortMode === "important") {
+			if (order === "asc") list = list.sort((t1, t2) => (t1.isImportant > t2.isImportant ? 1 : t1.isImportant < t2.isImportant ? -1 : 0));
+			else list = list.sort((t1, t2) => (t1.isImportant < t2.isImportant ? 1 : t1.isImportant > t2.isImportant ? -1 : 0));
+		}
+		else if (sortMode === "dueDate") {
+			if (order === "asc") list = list.sort((t1, t2) => {
+				// If a date is null, place them after tasks with due dates
+				if (t1.dueDate === null && t2.dueDate !== null) {
+					return 1;
+				}
+				if (t1.dueDate !== null && t2.dueDate === null) {
+					return -1;
+				}
+				
+				return new Date(t1.dueDate) > new Date(t2.dueDate) ? 1 : new Date(t1.dueDate) < new Date(t2.dueDate) ? -1 : 0
+			});
+			else list = list.sort((t1, t2) => (new Date(t1.dueDate) < new Date(t2.dueDate) ? 1 : new Date(t1.dueDate) > new Date(t2.dueDate) ? -1 : 0));
+		}
+		else if (sortMode === "created") {
+			if (order === "asc") list = list.sort((t1, t2) => (new Date(t1.dateCreated) > new Date(t2.dateCreated) ? 1 : new Date(t1.dateCreated) < new Date(t2.dateCreated) ? -1 : 0));
+			else list = list.sort((t1, t2) => (new Date(t1.dateCreated) < new Date(t2.dateCreated) ? 1 : new Date(t1.dateCreated) > new Date(t2.dateCreated) ? -1 : 0));
+		}
+		
 		return list;
-	}, [todoItems, hideCompleted]);
+	}, [todoItems, hideCompleted, order, sortMode]);
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const response = await getTasks();
+			const responseTasks = await getTasks();
+			const responsePriorities = await getPriorities();
 
-			setTodoItems(response);
+			setTodoItems(responseTasks);
+			setPriorities(responsePriorities);
 		};
 
 		fetchData();
@@ -96,9 +125,9 @@ export default function TodoPage() {
 	return (
 		<div className="container mt-3 d-flex flex-column">
 			<AddTask openModal={openModal} handleAdd={handleAdd} />
-			<SortFilter hideCompleted={hideCompleted} onHideCompleted={setHideCompleted} />
-			<TodoList todoItems={filteredTasks} onDelete={handleDelete} openModal={openModal} onToggleComplete={onToggleComplete} />
-			{openTodoModal && <TodoModal key={editingTask?.id ?? 'new'} open={openTodoModal} handleClose={handleClose} todoItem={editingTask} handleUpdate={handleUpdate} handleAdd={handleAdd} />}
+			<SortFilter sortMode={sortMode} order={order} setSortMode={setSortMode} setOrder={setOrder} hideCompleted={hideCompleted} onHideCompleted={setHideCompleted} />
+			<TodoList todoItems={filteredTasks} onDelete={handleDelete} openModal={openModal} onToggleComplete={onToggleComplete} priorities={priorities} />
+			{openTodoModal && <TodoModal key={editingTask?.id ?? 'new'} open={openTodoModal} handleClose={handleClose} todoItem={editingTask} handleUpdate={handleUpdate} handleAdd={handleAdd} priorities={priorities} />}
 		</div>
 	);
 }

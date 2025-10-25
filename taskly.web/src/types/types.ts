@@ -23,4 +23,9 @@ export type TaskDTO = {
 export type Priority = {
 	id: number;
 	name: string;
-}
+	priorityLevel: number;
+};
+
+export type SortMode = 'important' | 'dueDate' | 'created';
+
+export type Order = 'asc' | 'desc';
