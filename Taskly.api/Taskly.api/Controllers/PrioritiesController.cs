@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Taskly.api.Data;
+using Taskly.api.Data.Interfaces;
+using Taskly.api.Data.Repositories;
 
 namespace Taskly.api.Controllers
 {
@@ -8,17 +10,17 @@ namespace Taskly.api.Controllers
     [ApiController]
     public class PrioritiesController : Controller
     {
-        private readonly TasklyDbContext dbContext;
+        private readonly IPriorityRepository priorityRepo;
 
-        public PrioritiesController(TasklyDbContext dbContext)
+        public PrioritiesController(IPriorityRepository priorityRepository)
         {
-            this.dbContext = dbContext;
+            this.priorityRepo = priorityRepository;
         }
 
         [HttpGet]
         public IActionResult getPriorities()
         {
-            var priorities = dbContext.Priorities.ToList();
+            var priorities = priorityRepo.GetAllPriorities().ToList();
 
             return Ok(priorities);
         }

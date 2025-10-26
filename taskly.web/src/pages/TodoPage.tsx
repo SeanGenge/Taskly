@@ -7,15 +7,22 @@ import AddTask from "../components/AddTask/AddTask";
 import SortFilter from "../components/SortFilter/SortFilter";
 
 export default function TodoPage() {
+	// Stores the priorities from the Database
 	const [priorities, setPriorities] = useState<Priority[]>([]);
+	// Stores the todo items from the Database
 	const [todoItems, setTodoItems] = useState<Task[]>([]);
+	// The task that is being edited
 	const [editingTask, setEditingTask] = useState<Task | null>(null);
+	// true to display the modal and false otherwise
 	const [openTodoModal, setOpenTodoModal] = useState<boolean>(false);
+	// filter to hide completed tasks
 	const [hideCompleted, setHideCompleted] = useState(false);
-	// Sorting tasks
+	// Current sort mode. Used to sort the tasks
 	const [sortMode, setSortMode] = useState<SortMode>("created");
+	// Current order of the sort (Asc or Desc)
 	const [order, setOrder] = useState<Order>("desc");
 	
+	// Stores the tasks after filtering out the tasks or sorting them. This is used to pass onto the other components
 	const filteredTasks = useMemo(() => {
 		let list = [...todoItems];
 		
@@ -23,6 +30,9 @@ export default function TodoPage() {
 			list = list.filter(t => !t.isCompleted);
 		}
 		
+		// sort(t1, t2) -> 1 means sort t1 after t2
+		// 0 means keep order of t1 and t2
+		// -1 means sort t1 before t2
 		if (sortMode === "important") {
 			if (order === "asc") list = list.sort((t1, t2) => (t1.isImportant > t2.isImportant ? 1 : t1.isImportant < t2.isImportant ? -1 : 0));
 			else list = list.sort((t1, t2) => (t1.isImportant < t2.isImportant ? 1 : t1.isImportant > t2.isImportant ? -1 : 0));
@@ -50,6 +60,7 @@ export default function TodoPage() {
 	}, [todoItems, hideCompleted, order, sortMode]);
 
 	useEffect(() => {
+		// Retrieves the data from the database and stores them
 		const fetchData = async () => {
 			const responseTasks = await getTasks();
 			const responsePriorities = await getPriorities();

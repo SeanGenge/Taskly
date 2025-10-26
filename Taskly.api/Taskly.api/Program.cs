@@ -15,6 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+builder.Services.AddScoped<IPriorityRepository, PriorityRepository>();
 
 // Used if you want to use an in memory database
 //builder.Services.AddDbContext<TasklyDbContext>(options => options.UseInMemoryDatabase("TodoDb"));

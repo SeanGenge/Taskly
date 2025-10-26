@@ -58,7 +58,7 @@ namespace Taskly.api.Data.Repositories
                     taskToEdit.PriorityId = task.PriorityId;
                 }
 
-                _context.SaveChanges();
+                    _context.SaveChanges();
 
                 return taskToEdit;
             }
