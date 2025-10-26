@@ -26,7 +26,6 @@ export default function TodoPage() {
 	// Stores the tasks after filtering out the tasks or sorting them. This is used to pass onto the other components
 	const filteredTasks = useMemo(() => {
 		let list = [...todoItems];
-		const sortDirection = order === "asc" ? 1 : -1;
 		
 		if (hideCompleted) {
 			list = list.filter(t => !t.isCompleted);
@@ -36,13 +35,13 @@ export default function TodoPage() {
 		list.sort((a: Task, b: Task) => {
 			switch (sortMode) {
 				case "important":
-					return sortDirection * compareBoolean(a.isImportant, b.isImportant, order);
+					return compareBoolean(a.isImportant, b.isImportant, order);
 
 				case "dueDate":
 					return compareDates(a.dueDate, b.dueDate, order);
 
 				case "created":
-					return sortDirection * compareDates(a.dateCreated, b.dateCreated, order);
+					return compareDates(a.dateCreated, b.dateCreated, order);
 
 				default:
 					return 0;
