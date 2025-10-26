@@ -5,6 +5,7 @@ import TodoList from "../components/TodoList/TodoList";
 import TodoModal from "../components/TodoModal/TodoModal";
 import AddTask from "../components/AddTask/AddTask";
 import SortFilter from "../components/SortFilter/SortFilter";
+import { compareBoolean, compareDates } from "../utility/utility";
 
 export default function TodoPage() {
 	// Stores the priorities from the Database
@@ -25,36 +26,29 @@ export default function TodoPage() {
 	// Stores the tasks after filtering out the tasks or sorting them. This is used to pass onto the other components
 	const filteredTasks = useMemo(() => {
 		let list = [...todoItems];
+		const sortDirection = order === "asc" ? 1 : -1;
 		
 		if (hideCompleted) {
 			list = list.filter(t => !t.isCompleted);
 		}
 		
-		// sort(t1, t2) -> 1 means sort t1 after t2
-		// 0 means keep order of t1 and t2
-		// -1 means sort t1 before t2
-		if (sortMode === "important") {
-			if (order === "asc") list = list.sort((t1, t2) => (t1.isImportant > t2.isImportant ? 1 : t1.isImportant < t2.isImportant ? -1 : 0));
-			else list = list.sort((t1, t2) => (t1.isImportant < t2.isImportant ? 1 : t1.isImportant > t2.isImportant ? -1 : 0));
-		}
-		else if (sortMode === "dueDate") {
-			if (order === "asc") list = list.sort((t1, t2) => {
-				// If a date is null, place them after tasks with due dates
-				if (t1.dueDate === null && t2.dueDate !== null) {
-					return 1;
-				}
-				if (t1.dueDate !== null && t2.dueDate === null) {
-					return -1;
-				}
-				
-				return new Date(t1.dueDate) > new Date(t2.dueDate) ? 1 : new Date(t1.dueDate) < new Date(t2.dueDate) ? -1 : 0
-			});
-			else list = list.sort((t1, t2) => (new Date(t1.dueDate) < new Date(t2.dueDate) ? 1 : new Date(t1.dueDate) > new Date(t2.dueDate) ? -1 : 0));
-		}
-		else if (sortMode === "created") {
-			if (order === "asc") list = list.sort((t1, t2) => (new Date(t1.dateCreated) > new Date(t2.dateCreated) ? 1 : new Date(t1.dateCreated) < new Date(t2.dateCreated) ? -1 : 0));
-			else list = list.sort((t1, t2) => (new Date(t1.dateCreated) < new Date(t2.dateCreated) ? 1 : new Date(t1.dateCreated) > new Date(t2.dateCreated) ? -1 : 0));
-		}
+		// Sort the list based on the sortMode and order
+		list.sort((a: Task, b: Task) => {
+			switch (sortMode) {
+				case "important":
+					return sortDirection * compareBoolean(a.isImportant, b.isImportant, order);
+
+				case "dueDate":
+					return compareDates(a.dueDate, b.dueDate, order);
+
+				case "created":
+					return sortDirection * compareDates(a.dateCreated, b.dateCreated, order);
+
+				default:
+					return 0;
+			}
+		});
+		
 		
 		return list;
 	}, [todoItems, hideCompleted, order, sortMode]);
