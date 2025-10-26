@@ -10,6 +10,7 @@ export type Task = {
 };
 
 export type TaskDTO = {
+	id?: number;
 	name?: string;
 	description?: string;
 	isCompleted?: boolean;

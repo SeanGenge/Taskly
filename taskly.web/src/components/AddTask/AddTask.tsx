@@ -1,13 +1,14 @@
 import { useState, type FormEvent } from "react";
-import { type TaskDTO } from "../../types/types";
+import type { TaskDTO, Priority } from "../../types/types";
 import { Form } from "react-bootstrap";
 
 type props = {
 	openModal: (id?: number) => void;
 	handleAdd: (item: TaskDTO) => void;
+	priorities: Priority[];
 };
 
-export default function Addtask({ openModal, handleAdd }: props) {
+export default function Addtask({ openModal, handleAdd, priorities }: props) {
 	const [name, setName] = useState<string>("");
 	const [validated, setValidated] = useState<boolean>(false);
 
@@ -30,6 +31,8 @@ export default function Addtask({ openModal, handleAdd }: props) {
 		const newTask: TaskDTO = {
 
 			name: name,
+			// Required to send priority id or the item will not be created
+			priorityId: priorities?.at(0)?.id ?? 0
 		}
 
 		handleAdd(newTask);

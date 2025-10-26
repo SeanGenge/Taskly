@@ -10,7 +10,7 @@ namespace Taskly.api.Data
             
         }
 
-        public DbSet<Models.Task> Tasks { get; set; }
-        public DbSet<Priority> Priorities { get; set; }
+        public virtual DbSet<Models.Task> Tasks { get; set; }
+        public virtual DbSet<Priority> Priorities { get; set; }
     }
 }

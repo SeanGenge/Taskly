@@ -123,11 +123,11 @@ export default function TodoPage() {
 	}
 
 	return (
-		<div className="container mt-3 d-flex flex-column">
-			<AddTask openModal={openModal} handleAdd={handleAdd} />
+		<>
+			<AddTask openModal={openModal} handleAdd={handleAdd} priorities={priorities} />
 			<SortFilter sortMode={sortMode} order={order} setSortMode={setSortMode} setOrder={setOrder} hideCompleted={hideCompleted} onHideCompleted={setHideCompleted} />
 			<TodoList todoItems={filteredTasks} onDelete={handleDelete} openModal={openModal} onToggleComplete={onToggleComplete} priorities={priorities} />
 			{openTodoModal && <TodoModal key={editingTask?.id ?? 'new'} open={openTodoModal} handleClose={handleClose} todoItem={editingTask} handleUpdate={handleUpdate} handleAdd={handleAdd} priorities={priorities} />}
-		</div>
+		</>
 	);
 }

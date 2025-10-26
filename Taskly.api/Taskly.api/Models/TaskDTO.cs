@@ -13,6 +13,6 @@ namespace Taskly.api.Models
         public bool? IsImportant { get; set; }
         public bool? IsCompleted { get; set; }
         public DateTime? DateCreated { get; set; }
-        public int? PriorityId { get; set; }
+        public int PriorityId { get; set; }
     }
 }

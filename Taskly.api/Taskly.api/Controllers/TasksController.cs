@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Taskly.api.Data;
+using Taskly.api.Data.Interfaces;
+using Taskly.api.Mappers;
 using Taskly.api.Models;
 
 namespace Taskly.api.Controllers
@@ -8,60 +10,44 @@ namespace Taskly.api.Controllers
     [ApiController]
     public class TasksController : Controller
     {
-        private readonly TasklyDbContext dbContext;
+        private readonly ITaskRepository taskRepo;
 
-        public TasksController(TasklyDbContext dbContext)
+        public TasksController(ITaskRepository taskRepository)
         {
-            this.dbContext = dbContext;
+            this.taskRepo = taskRepository;
         }
 
         [HttpGet]
         public IActionResult GetAllTasks()
         {
-            // Retrieve the items from the dbContext
-            var todoItems = dbContext.Tasks.ToList();
+            try
+            {
+                // Retrieve the items from the dbContext
+                var todoItems = taskRepo.GetAllTasks().Select(t => t.ToTaskDTO());
 
-            return Ok(todoItems);
+                return Ok(todoItems);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
-        public IActionResult AddTask(TaskDTO request)
+        public async Task<IActionResult> AddTask([FromBody] TaskDTO newTask)
         {
-            if (string.IsNullOrWhiteSpace(request.Name)) return BadRequest();
-
-            int firstPriotityId = dbContext.Priorities.First().Id;
-
             try
             {
-                // Create a new Todo item
-                var domainModelTask = new Models.Task
+                if (ModelState.IsValid)
                 {
-                    Name = request.Name,
-                    Description = request.Description,
-                    IsCompleted = false,
-                    DateCreated = DateTime.Now,
-                    DueDate = request?.DueDate,
-                    IsImportant = request?.IsImportant ?? false,
-                    PriorityId = request?.PriorityId ?? firstPriotityId,
-                };
+                    var result = await taskRepo.AddTask(newTask.ToTask());
 
-                // Save the todo item to the in memory db and save changes
-                dbContext.Tasks.Add(domainModelTask);
-                dbContext.SaveChanges();
-
-                TaskDTO response = new TaskDTO
+                    return Ok(result.ToTaskDTO());
+                }
+                else
                 {
-                    Id = domainModelTask.Id,
-                    Name = domainModelTask.Name,
-                    Description = domainModelTask.Description,
-                    IsCompleted = domainModelTask.IsCompleted,
-                    DueDate = domainModelTask.DueDate,
-                    DateCreated = domainModelTask.DateCreated,
-                    IsImportant = domainModelTask.IsImportant,
-                    PriorityId = domainModelTask.PriorityId
-                };
-
-                return Ok(response);
+                    return BadRequest();
+                }
             }
             catch (Exception ex)
             {
@@ -72,18 +58,11 @@ namespace Taskly.api.Controllers
         [HttpDelete("{id:int}")]
         public IActionResult DeleteTask(int id)
         {
-            var item = dbContext.Tasks.Find(id);
-            if (item is null)
-                // Item is not found
-                return NotFound();
-
             try
             {
-                // Remove item
-                dbContext.Tasks.Remove(item);
-                dbContext.SaveChanges();
+                var result = taskRepo.DeleteTask(id);
 
-                return Ok(item);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -92,35 +71,13 @@ namespace Taskly.api.Controllers
         }
 
         [HttpPatch("{id:int}")]
-        public async Task<IActionResult> Patch(int id, [FromBody] TaskDTO dto)
+        public IActionResult UpdateTask(int id, [FromBody] TaskDTO task)
         {
             try
             {
-                // Attempt to find the item
-                var item = await dbContext.Tasks.FindAsync(id);
-                if (item is null) return NotFound();
+                var result = taskRepo.UpdateTask(id, task.ToTask());
 
-                // Check which fields needs to be updated and update accordingly
-                if (!string.IsNullOrWhiteSpace(dto.Name)) item.Name = dto.Name;
-                if (dto.Description is not null) item.Description = dto.Description;
-                if (dto.DueDate.HasValue) item.DueDate = dto.DueDate.Value;
-                if (dto.DateCompleted.HasValue) item.DateCompleted = dto.DateCompleted.Value;
-                if (dto.IsCompleted.HasValue)
-                {
-                    item.IsCompleted = dto.IsCompleted.Value;
-                    // Also set the completion date
-                    item.DateCompleted = DateTime.Now;
-                }
-                if (dto.IsImportant.HasValue) item.IsImportant = dto.IsImportant.Value;
-
-                // Just check that priority id is a valid id
-                if (dbContext.Priorities.Any(i => i.Id == dto.PriorityId))
-                {
-                    item.PriorityId = dto?.PriorityId ?? dbContext.Priorities.First().Id;
-                }
-
-                await dbContext.SaveChangesAsync();
-                return Ok(item);
+                return Ok(result?.ToTaskDTO());
             }
             catch (Exception ex)
             {

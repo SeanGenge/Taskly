@@ -18,7 +18,7 @@ export default function SortFilter({ sortMode, order, setSortMode, setOrder, hid
 	};
 	const ORDER_LABEL: Record<SortMode, Record<Order, string>> = {
 		important: { asc: 'last', desc: 'first' },
-		dueDate: { asc: 'soonest first', desc: 'latest first' },
+		dueDate: { asc: 'due earliest', desc: 'due latest' },
 		created: { asc: 'oldest first', desc: 'newest first' },
 	};
 
