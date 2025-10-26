@@ -128,6 +128,7 @@ export default function TodoPage() {
 				// Requires the name field to be passed
 				name: item.name,
 				isCompleted: !checked,
+				priorityId: item.priorityId
 			});
 
 		setTodoItems(prev => prev.map(t => (t.id === updated.id ? updated : t)));

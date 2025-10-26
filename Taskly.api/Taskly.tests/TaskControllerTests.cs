@@ -56,19 +56,37 @@ namespace Taskly.tests
             var result = await _controller.AddTask(newTask.ToTaskDTO());
             var obj = result as ObjectResult;
 
-            Assert.Equal(200, obj.StatusCode);
+            Assert.Equal(201, obj.StatusCode);
         }
 
         [Fact]
-        public void Update_Task_ReturnOk()
+        public async System.Threading.Tasks.Task AddTask_MissingName_ReturnBadRequest()
+        {
+            var invalidDTO = _fixture.Build<TaskDTO>()
+                                  .With(t => t.Name, string.Empty)
+                                  .Create();
+
+            _controller = new TasksController(_taskRepository.Object);
+            _controller.ModelState.AddModelError("Name", "The Name field cannot be empty.");
+
+            // Asserts
+            var result = await _controller.AddTask(invalidDTO);
+            var obj = result as BadRequestResult;
+             
+            Assert.Equal(400, obj.StatusCode);
+            _taskRepository.Verify(repo => repo.AddTask(It.IsAny<api.Models.Task>()), Moq.Times.Never());
+        }
+
+        [Fact]
+        public async System.Threading.Tasks.Task Update_Task_ReturnOk()
         {
             var newTask = _fixture.Create<api.Models.Task>();
 
-            _taskRepository.Setup(repo => repo.UpdateTask(It.IsAny<int>(), It.IsAny<api.Models.Task>())).Returns(newTask);
+            _taskRepository.Setup(repo => repo.AddTask(It.IsAny<api.Models.Task>())).Returns(System.Threading.Tasks.Task.FromResult(newTask));
             _controller = new TasksController(_taskRepository.Object);
 
             // Asserts
-            var result = _controller.UpdateTask(newTask.Id, newTask.ToTaskDTO());
+            var result = await _controller.UpdateTask(newTask.Id, newTask.ToTaskDTO());
             var obj = result as ObjectResult;
 
             Assert.Equal(200, obj.StatusCode);

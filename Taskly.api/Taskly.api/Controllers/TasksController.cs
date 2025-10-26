@@ -42,7 +42,7 @@ namespace Taskly.api.Controllers
                 {
                     var result = await taskRepo.AddTask(newTask.ToTask());
 
-                    return Ok(result.ToTaskDTO());
+                    return StatusCode(201, result.ToTaskDTO());
                 }
                 else
                 {
@@ -71,13 +71,20 @@ namespace Taskly.api.Controllers
         }
 
         [HttpPatch("{id:int}")]
-        public IActionResult UpdateTask(int id, [FromBody] TaskDTO task)
+        public async Task<IActionResult> UpdateTask(int id, [FromBody] TaskDTO task)
         {
             try
             {
-                var result = taskRepo.UpdateTask(id, task.ToTask());
+                if (ModelState.IsValid)
+                {
+                    var result = await taskRepo.UpdateTask(id, task.ToTask());
 
-                return Ok(result?.ToTaskDTO());
+                    return Ok(result?.ToTaskDTO());
+                }
+                else
+                {
+                    return BadRequest();
+                }
             }
             catch (Exception ex)
             {

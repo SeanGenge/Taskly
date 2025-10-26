@@ -7,8 +7,11 @@ namespace Taskly.api.Models
     {
         [Key]
         public int Id { get; set; }
+        [MaxLength(100)]
+        [MinLength(1, ErrorMessage = "The Task Name cannot be empty.")]
         public required string Name {  get; set; }
-        public string? Description { get; set; }
+        [MaxLength(5000)]
+        public required string Description { get; set; }
         public DateTime? DueDate { get; set; }
         public DateTime? DateCompleted { get; set; }
         public bool IsImportant { get; set; }

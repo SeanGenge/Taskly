@@ -38,7 +38,7 @@ namespace Taskly.api.Data.Repositories
             }
         }
 
-        public api.Models.Task? UpdateTask(int id, api.Models.Task task)
+        public async Task<api.Models.Task?> UpdateTask(int id, api.Models.Task task)
         {
             // Attempt to find the item
             var taskToEdit = _context.Tasks.Where(t => t.Id == id).FirstOrDefault();
@@ -58,7 +58,7 @@ namespace Taskly.api.Data.Repositories
                     taskToEdit.PriorityId = task.PriorityId;
                 }
 
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
 
                 return taskToEdit;
             }
